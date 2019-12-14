@@ -62,7 +62,8 @@ bool SSD1306_Init(I2C_HandleTypeDef *handle) {
 	
 	/* A little delay */
 	HAL_Delay(100);
-	
+
+#if 0
 	/* Init LCD */
 	SSD1306_WRITECOMMAND(0xAE); //display off
 	SSD1306_WRITECOMMAND(0x20); //Set Memory Addressing Mode   
@@ -92,7 +93,37 @@ bool SSD1306_Init(I2C_HandleTypeDef *handle) {
 	SSD1306_WRITECOMMAND(0x8D); //--set DC-DC enable
 	SSD1306_WRITECOMMAND(0x14); //
 	SSD1306_WRITECOMMAND(0xAF); //--turn on SSD1306 panel
-	
+#endif
+    
+    SSD1306_WRITECOMMAND(0xAE); // Set display off
+    SSD1306_WRITECOMMAND(0xA8); // Set multiplex ratio
+    SSD1306_WRITECOMMAND(0x1F); // -- from default 63 to 31 (i.e. 32MUX)
+    SSD1306_WRITECOMMAND(0xD3); // Set display offset
+    SSD1306_WRITECOMMAND(0x00); // -- no offset
+    SSD1306_WRITECOMMAND(0x40); // Set display start line
+    SSD1306_WRITECOMMAND(0xA1); // Set segment re-map, column address 127 is mapped to SEG0
+    SSD1306_WRITECOMMAND(0xC8); // Set COM output scan direction - remapped mode
+    SSD1306_WRITECOMMAND(0x81); // Set contrast control for BANK0
+    SSD1306_WRITECOMMAND(0x7F); // -- range 0x00 to 0xFF => 50%
+    SSD1306_WRITECOMMAND(0xA4); // Enable display outputs according to the GDDRAM contents.
+    SSD1306_WRITECOMMAND(0xA6); // Set normal display
+    SSD1306_WRITECOMMAND(0xD5); // Set display clock divide ration and oscillator frequency
+    SSD1306_WRITECOMMAND(0x80); // -- frequency (1000 - default); display clock divide ratio (0000 - divide ration 1)
+    SSD1306_WRITECOMMAND(0x8D); // Charge pump setting
+    SSD1306_WRITECOMMAND(0x14); // -- enable charge pump
+
+    SSD1306_WRITECOMMAND(0x2E); // Deactivate scroll
+    SSD1306_WRITECOMMAND(0x20); // Set memory addressing mode
+    SSD1306_WRITECOMMAND(0x00); //!!!!!!!!! 00,Horizontal Addressing Mode;01,Vertical Addressing Mode;10,Page Addressing Mode (RESET);11,Invalid
+    SSD1306_WRITECOMMAND(0xDA); // Set COM pins hardware configuration
+    SSD1306_WRITECOMMAND(0x02); // --
+    SSD1306_WRITECOMMAND(0xD9); // Set pre-charge period
+    SSD1306_WRITECOMMAND(0x22); // --
+    SSD1306_WRITECOMMAND(0xDB); // Set Vcomh deselect level
+    SSD1306_WRITECOMMAND(0x20); // -- 0.77 x Vcc (RESET)
+    SSD1306_WRITECOMMAND(0xAF); // Set display on
+    
+    
 	/* Clear screen */
 	SSD1306_Fill(SSD1306_COLOR_BLACK);
 	

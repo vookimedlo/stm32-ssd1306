@@ -97,7 +97,7 @@ extern SSD1306_Font_t SSD1306_Font_16x26;
  * @param  *Font: Pointer to @ref TM_FontDef_t font used for calculations
  * @retval None
  */
-void SSD1306_Font_GetStringSize(const char* str, SSD1306_Font_Size_t* SizeStruct, SSD1306_Font_t* Font);
+void SSD1306_Font_GetStringSize(const char* str, SSD1306_Font_Size_t* SizeStruct, const SSD1306_Font_t* Font);
 
 /**
  * @}
