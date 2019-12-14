@@ -64,38 +64,7 @@ bool SSD1306_Init(I2C_HandleTypeDef *handle) {
     /* A little delay */
     HAL_Delay(100);
 
-#if 0
     /* Init LCD */
-    SSD1306_WRITECOMMAND(0xAE); //display off
-    SSD1306_WRITECOMMAND(0x20); //Set Memory Addressing Mode
-    SSD1306_WRITECOMMAND(0x10); //00,Horizontal Addressing Mode;01,Vertical Addressing Mode;10,Page Addressing Mode (RESET);11,Invalid
-    SSD1306_WRITECOMMAND(0xB0); //Set Page Start Address for Page Addressing Mode,0-7
-    SSD1306_WRITECOMMAND(0xC8); //Set COM Output Scan Direction
-    SSD1306_WRITECOMMAND(0x00); //---set low column address
-    SSD1306_WRITECOMMAND(0x10); //---set high column address
-    SSD1306_WRITECOMMAND(0x40); //--set start line address
-    SSD1306_WRITECOMMAND(0x81); //--set contrast control register
-    SSD1306_WRITECOMMAND(0xFF);
-    SSD1306_WRITECOMMAND(0xA1); //--set segment re-map 0 to 127
-    SSD1306_WRITECOMMAND(0xA6); //--set normal display
-    SSD1306_WRITECOMMAND(0xA8); //--set multiplex ratio(1 to 64)
-    SSD1306_WRITECOMMAND(0x3F); //
-    SSD1306_WRITECOMMAND(0xA4); //0xa4,Output follows RAM content;0xa5,Output ignores RAM content
-    SSD1306_WRITECOMMAND(0xD3); //-set display offset
-    SSD1306_WRITECOMMAND(0x00); //-not offset
-    SSD1306_WRITECOMMAND(0xD5); //--set display clock divide ratio/oscillator frequency
-    SSD1306_WRITECOMMAND(0xF0); //--set divide ratio
-    SSD1306_WRITECOMMAND(0xD9); //--set pre-charge period
-    SSD1306_WRITECOMMAND(0x22); //
-    SSD1306_WRITECOMMAND(0xDA); //--set com pins hardware configuration
-    SSD1306_WRITECOMMAND(0x12);
-    SSD1306_WRITECOMMAND(0xDB); //--set vcomh
-    SSD1306_WRITECOMMAND(0x20); //0x20,0.77xVcc
-    SSD1306_WRITECOMMAND(0x8D); //--set DC-DC enable
-    SSD1306_WRITECOMMAND(0x14); //
-    SSD1306_WRITECOMMAND(0xAF); //--turn on SSD1306 panel
-#endif
-
     SSD1306_WRITECOMMAND(0xAE); // Set display off
     SSD1306_WRITECOMMAND(0xA8); // Set multiplex ratio
     SSD1306_WRITECOMMAND(0x1F); // -- from default 63 to 31 (i.e. 32MUX)
@@ -115,15 +84,19 @@ bool SSD1306_Init(I2C_HandleTypeDef *handle) {
 
     SSD1306_WRITECOMMAND(0x2E); // Deactivate scroll
     SSD1306_WRITECOMMAND(0x20); // Set memory addressing mode
-    SSD1306_WRITECOMMAND(0x00); //!!!!!!!!! 00,Horizontal Addressing Mode;01,Vertical Addressing Mode;10,Page Addressing Mode (RESET);11,Invalid
+    SSD1306_WRITECOMMAND(0x10); // -- Page Addressing Mode (RESET)
     SSD1306_WRITECOMMAND(0xDA); // Set COM pins hardware configuration
     SSD1306_WRITECOMMAND(0x02); // --
     SSD1306_WRITECOMMAND(0xD9); // Set pre-charge period
     SSD1306_WRITECOMMAND(0x22); // --
     SSD1306_WRITECOMMAND(0xDB); // Set Vcomh deselect level
     SSD1306_WRITECOMMAND(0x20); // -- 0.77 x Vcc (RESET)
-    SSD1306_WRITECOMMAND(0xAF); // Set display on
 
+    SSD1306_WRITECOMMAND(0xB0); // Set page start address for page addressing mode
+    SSD1306_WRITECOMMAND(0x00); // Set lower column start address for page addressing mode
+    SSD1306_WRITECOMMAND(0x10); // Set higher column start address for page addressing mode
+
+    SSD1306_WRITECOMMAND(0xAF); // Set display on
 
     /* Clear screen */
     SSD1306_Fill(SSD1306_COLOR_BLACK);
