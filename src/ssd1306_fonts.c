@@ -1,31 +1,32 @@
-/**	
- * |----------------------------------------------------------------------
- * | Copyright (c) 2016 Tilen Majerle
- * |  
- * | Permission is hereby granted, free of charge, to any person
- * | obtaining a copy of this software and associated documentation
- * | files (the "Software"), to deal in the Software without restriction,
- * | including without limitation the rights to use, copy, modify, merge,
- * | publish, distribute, sublicense, and/or sell copies of the Software, 
- * | and to permit persons to whom the Software is furnished to do so, 
- * | subject to the following conditions:
- * | 
- * | The above copyright notice and this permission notice shall be
- * | included in all copies or substantial portions of the Software.
- * | 
- * | THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * | EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * | OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
- * | AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * | HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * | WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * | FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * | OTHER DEALINGS IN THE SOFTWARE.
- * |----------------------------------------------------------------------
- */
-#include "tm_stm32_fonts.h"
+/*
+   Copyright (c) 2019 Michal Duda
+   Copyright (c) 2016 Tilen Majerle
 
-const uint16_t TM_Font7x10 [] = {
+   Permission is hereby granted, free of charge, to any person
+   obtaining a copy of this software and associated documentation
+   files (the "Software"), to deal in the Software without restriction,
+   including without limitation the rights to use, copy, modify, merge,
+   publish, distribute, sublicense, and/or sell copies of the Software,
+   and to permit persons to whom the Software is furnished to do so,
+   subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be
+   included in all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+   OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+   AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+   HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+   OTHER DEALINGS IN THE SOFTWARE.
+  ----------------------------------------------------------------------
+*/
+#include "ssd1306_fonts.h"
+#include <string.h>
+
+static const uint16_t Font7x10 [] = {
 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,  // sp
 0x1000, 0x1000, 0x1000, 0x1000, 0x1000, 0x1000, 0x0000, 0x1000, 0x0000, 0x0000,  // !
 0x2800, 0x2800, 0x2800, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,  // "
@@ -123,7 +124,7 @@ const uint16_t TM_Font7x10 [] = {
 0x0000, 0x0000, 0x0000, 0x7400, 0x4C00, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,  // ~
 };
 
-const uint16_t TM_Font11x18 [] = {
+static const uint16_t Font11x18 [] = {
 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,   // sp
 0x0000, 0x0C00, 0x0C00, 0x0C00, 0x0C00, 0x0C00, 0x0C00, 0x0C00, 0x0C00, 0x0C00, 0x0C00, 0x0C00, 0x0000, 0x0C00, 0x0C00, 0x0000, 0x0000, 0x0000,   // !
 0x0000, 0x1B00, 0x1B00, 0x1B00, 0x1B00, 0x1B00, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,   // "
@@ -221,7 +222,7 @@ const uint16_t TM_Font11x18 [] = {
 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x3880, 0x7F80, 0x4700, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,   // ~
 };
 
-const uint16_t TM_Font16x26 [] = {
+static const uint16_t Font16x26 [] = {
 0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000, // Ascii = [ ]
 0x03E0,0x03E0,0x03E0,0x03E0,0x03E0,0x03E0,0x03E0,0x03E0,0x03C0,0x03C0,0x01C0,0x01C0,0x01C0,0x01C0,0x01C0,0x0000,0x0000,0x0000,0x03E0,0x03E0,0x03E0,0x0000,0x0000,0x0000,0x0000,0x0000, // Ascii = [!]
 0x1E3C,0x1E3C,0x1E3C,0x1E3C,0x1E3C,0x1E3C,0x1E3C,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000, // Ascii = ["]
@@ -320,25 +321,25 @@ const uint16_t TM_Font16x26 [] = {
 };
 
 
-TM_FONT_t TM_Font_7x10 = {
+SSD1306_Font_t SSD1306_Font_7x10 = {
 	7,
 	10,
-	TM_Font7x10
+	Font7x10
 };
 
-TM_FONT_t TM_Font_11x18 = {
+SSD1306_Font_t SSD1306_Font_11x18 = {
 	11,
 	18,
-	TM_Font11x18
+	Font11x18
 };
 
-TM_FONT_t TM_Font_16x26 = {
+SSD1306_Font_t SSD1306_Font_16x26 = {
 	16,
 	26,
-	TM_Font16x26
+	Font16x26
 };
 
-char* TM_FONT_GetStringSize(char* str, TM_FONT_SIZE_t* SizeStruct, TM_FONT_t* Font) {
+char* SSD1306_Font_GetStringSize(char* str, SSD1306_Font_Size_t* SizeStruct, SSD1306_Font_t* Font) {
 	/* Fill settings */
 	SizeStruct->Height = Font->FontHeight;
 	SizeStruct->Width = Font->FontWidth * strlen(str);
