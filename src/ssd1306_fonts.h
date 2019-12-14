@@ -23,6 +23,7 @@
    OTHER DEALINGS IN THE SOFTWARE.
   ----------------------------------------------------------------------
 */
+
 #pragma once
 
 /* C++ detection */
@@ -42,17 +43,17 @@ extern "C" {
  * @brief  Font structure used on my LCD libraries
  */
 typedef struct {
-	uint8_t FontWidth;    /*!< Font width in pixels */
-	uint8_t FontHeight;   /*!< Font height in pixels */
-	const uint16_t *data; /*!< Pointer to data font data array */
+    uint8_t FontWidth;    /*!< Font width in pixels */
+    uint8_t FontHeight;   /*!< Font height in pixels */
+    const uint16_t *data; /*!< Pointer to data font data array */
 } SSD1306_Font_t;
 
-/** 
- * @brief  String width and height in unit of pixels 
+/**
+ * @brief  String width and height in unit of pixels
  */
 typedef struct {
-	uint16_t Width;       /*!< String width in units of pixels */
-	uint16_t Height;      /*!< String height in units of pixels */
+    uint16_t Width;       /*!< String width in units of pixels */
+    uint16_t Height;      /*!< String height in units of pixels */
 } SSD1306_Font_Size_t;
 
 /**
@@ -66,24 +67,24 @@ typedef struct {
  */
 
 /**
- * @brief  7 x 10 pixels font size structure 
+ * @brief  7 x 10 pixels font size structure
  */
 extern SSD1306_Font_t SSD1306_Font_7x10;
 
 /**
- * @brief  11 x 18 pixels font size structure 
+ * @brief  11 x 18 pixels font size structure
  */
 extern SSD1306_Font_t SSD1306_Font_11x18;
 
 /**
- * @brief  16 x 26 pixels font size structure 
+ * @brief  16 x 26 pixels font size structure
  */
 extern SSD1306_Font_t SSD1306_Font_16x26;
 
 /**
  * @}
  */
- 
+
 /**
  * @defgroup SSD1306_Font Functions
  * @brief    Library functions
@@ -102,11 +103,11 @@ void SSD1306_Font_GetStringSize(const char* str, SSD1306_Font_Size_t* SizeStruct
 /**
  * @}
  */
- 
+
 /**
  * @}
  */
- 
+
 /**
  * @}
  */

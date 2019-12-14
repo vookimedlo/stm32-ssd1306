@@ -6,8 +6,8 @@
     obtaining a copy of this software and associated documentation
     files (the "Software"), to deal in the Software without restriction,
     including without limitation the rights to use, copy, modify, merge,
-    publish, distribute, sublicense, and/or sell copies of the Software, 
-    and to permit persons to whom the Software is furnished to do so, 
+    publish, distribute, sublicense, and/or sell copies of the Software,
+    and to permit persons to whom the Software is furnished to do so,
     subject to the following conditions:
 
     The above copyright notice and this permission notice shall be
@@ -18,11 +18,12 @@
     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
     AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
     OTHER DEALINGS IN THE SOFTWARE.
    ----------------------------------------------------------------------
  */
+
 #pragma once
 
 /* C++ detection */
@@ -68,7 +69,7 @@ extern "C" {
 /**
  * @}
  */
- 
+
 /**
  * @defgroup TM_SSD1306_Typedefs
  * @brief    Library Typedefs
@@ -79,8 +80,8 @@ extern "C" {
  * @brief  SSD1306 color enumeration
  */
 typedef enum {
-	SSD1306_COLOR_BLACK = 0x00, /*!< Black color, no pixel */
-	SSD1306_COLOR_WHITE = 0x01  /*!< Pixel is set. Color depends on LCD */
+    SSD1306_COLOR_BLACK = 0x00, /*!< Black color, no pixel */
+    SSD1306_COLOR_WHITE = 0x01  /*!< Pixel is set. Color depends on LCD */
 } SSD1306_COLOR_t;
 
 /**
@@ -102,7 +103,7 @@ typedef enum {
  */
 bool SSD1306_Init(I2C_HandleTypeDef *handle);
 
-/** 
+/**
  * @brief  Updates buffer from internal RAM to LCD
  * @note   This function must be called each time you do some changes to LCD, to update buffer from RAM to LCD
  * @param  None
@@ -118,7 +119,7 @@ void SSD1306_UpdateScreen(void);
  */
 void SSD1306_ToggleInvert(void);
 
-/** 
+/**
  * @brief  Fills entire LCD with desired color
  * @note   @ref SSD1306_UpdateScreen() must be called after that in order to see updated LCD screen
  * @param  Color: Color to be used for screen fill. This parameter can be a value of @ref SSD1306_COLOR_t enumeration
@@ -239,11 +240,11 @@ void TM_SSD1306_DrawFilledCircle(int16_t x0, int16_t y0, int16_t r, SSD1306_COLO
 /**
  * @}
  */
- 
+
 /**
  * @}
  */
- 
+
 /**
  * @}
  */

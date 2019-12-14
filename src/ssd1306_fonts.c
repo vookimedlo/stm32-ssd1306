@@ -23,6 +23,7 @@
    OTHER DEALINGS IN THE SOFTWARE.
   ----------------------------------------------------------------------
 */
+
 #include "ssd1306_fonts.h"
 #include <string.h>
 
@@ -322,25 +323,25 @@ static const uint16_t Font16x26 [] = {
 
 
 SSD1306_Font_t SSD1306_Font_7x10 = {
-	7,
-	10,
-	Font7x10
+    7,
+    10,
+    Font7x10
 };
 
 SSD1306_Font_t SSD1306_Font_11x18 = {
-	11,
-	18,
-	Font11x18
+    11,
+    18,
+    Font11x18
 };
 
 SSD1306_Font_t SSD1306_Font_16x26 = {
-	16,
-	26,
-	Font16x26
+    16,
+    26,
+    Font16x26
 };
 
 void SSD1306_Font_GetStringSize(const char* str, SSD1306_Font_Size_t* SizeStruct, const SSD1306_Font_t* Font) {
-	/* Fill settings */
-	SizeStruct->Height = Font->FontHeight;
-	SizeStruct->Width = Font->FontWidth * strlen(str);
+    /* Fill settings */
+    SizeStruct->Height = Font->FontHeight;
+    SizeStruct->Width = Font->FontWidth * strlen(str);
 }
