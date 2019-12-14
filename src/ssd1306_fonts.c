@@ -339,11 +339,8 @@ SSD1306_Font_t SSD1306_Font_16x26 = {
 	Font16x26
 };
 
-char* SSD1306_Font_GetStringSize(char* str, SSD1306_Font_Size_t* SizeStruct, SSD1306_Font_t* Font) {
+void SSD1306_Font_GetStringSize(const char* str, SSD1306_Font_Size_t* SizeStruct, const SSD1306_Font_t* Font) {
 	/* Fill settings */
 	SizeStruct->Height = Font->FontHeight;
 	SizeStruct->Width = Font->FontWidth * strlen(str);
-	
-	/* Return pointer */
-	return str;
 }

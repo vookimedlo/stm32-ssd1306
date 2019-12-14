@@ -95,9 +95,9 @@ extern SSD1306_Font_t SSD1306_Font_16x26;
  * @param  *str: String to be checked for length and height
  * @param  *SizeStruct: Pointer to empty @ref SSD1306_Font_Size_t structure where informations will be saved
  * @param  *Font: Pointer to @ref TM_FontDef_t font used for calculations
- * @retval Pointer to string used for length and height
+ * @retval None
  */
-char* SSD1306_Font_GetStringSize(char* str, SSD1306_Font_Size_t* SizeStruct, SSD1306_Font_t* Font);
+void SSD1306_Font_GetStringSize(const char* str, SSD1306_Font_Size_t* SizeStruct, SSD1306_Font_t* Font);
 
 /**
  * @}

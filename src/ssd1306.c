@@ -25,21 +25,16 @@
 */
 #include "ssd1306.h"
 
-/* Private */
-static I2C_HandleTypeDef *i2cHandle = NULL;
-
+/* Private functions */
 static void I2C_Write(uint8_t address, uint8_t reg, uint8_t data, uint32_t timeout);
 static void I2C_WriteMulti(uint8_t address, uint8_t reg, const uint8_t* data, uint16_t size, uint32_t timeout);
-
-
-
 
 /* Write command */
 #define SSD1306_WRITECOMMAND(command)      I2C_Write(SSD1306_I2C_ADDR_SHIFTED, 0x00, (command), SSD1306_I2C_WRITE_TIMEOUT)
 /* Write data */
 #define SSD1306_WRITEDATA(data)            I2C_Write(SSD1306_I2C_ADDR_SHIFTED, 0x40, (data), SSD1306_I2C_WRITE_TIMEOUT)
 /* Absolute value */
-#define ABS(x)   ((x) > 0 ? (x) : -(x))
+#define ABS(x)                             ((x) > 0 ? (x) : -(x))
 
 /* SSD1306 data buffer */
 static uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
@@ -53,7 +48,8 @@ typedef struct {
 } SSD1306_t;
 
 /* Private variable */
-static SSD1306_t SSD1306;
+static I2C_HandleTypeDef *i2cHandle = NULL;
+static SSD1306_t SSD1306 = { 0 };
 
 bool SSD1306_Init(I2C_HandleTypeDef *handle) {
 	/* Check if LCD connected to I2C */
@@ -119,18 +115,14 @@ static void I2C_Write(uint8_t address, uint8_t reg, uint8_t data, uint32_t timeo
 }
 
 static void I2C_WriteMulti(uint8_t address, uint8_t reg, const uint8_t* data, uint16_t size, uint32_t timeout) {
-	uint8_t dataToSend[512];
+	uint8_t dataToSend[SSD1306_WIDTH + 1];
 	dataToSend[0] = reg;
-	for(int i = 0; i < size; i++)
-		dataToSend[i + 1] = data[i];
-
+    memcpy(dataToSend + 1, data, size);
 	HAL_I2C_Master_Transmit(i2cHandle, address, dataToSend, size + 1, timeout);
 }
 
 void SSD1306_UpdateScreen(void) {
-	uint8_t m;
-	
-	for (m = 0; m < 8; m++) {
+	for (uint8_t m = 0; m < 8; ++m) {
 		SSD1306_WRITECOMMAND(0xB0 + m);
 		SSD1306_WRITECOMMAND(0x00);
 		SSD1306_WRITECOMMAND(0x10);
@@ -141,13 +133,11 @@ void SSD1306_UpdateScreen(void) {
 }
 
 void SSD1306_ToggleInvert(void) {
-	uint16_t i;
-	
 	/* Toggle invert */
 	SSD1306.Inverted = !SSD1306.Inverted;
 	
 	/* Do memory toggle */
-	for (i = 0; i < sizeof(SSD1306_Buffer); i++) {
+	for (uint16_t i = 0; i < sizeof(SSD1306_Buffer); ++i) {
 		SSD1306_Buffer[i] = ~SSD1306_Buffer[i];
 	}
 }
@@ -186,8 +176,6 @@ void SSD1306_GotoXY(uint16_t x, uint16_t y) {
 }
 
 char SSD1306_Putc(char ch, SSD1306_Font_t* Font, SSD1306_COLOR_t color) {
-	uint32_t i, b, j;
-	
 	/* Check available space in LCD */
 	if (
 		SSD1306_WIDTH <= (SSD1306.CurrentX + Font->FontWidth) ||
@@ -198,9 +186,9 @@ char SSD1306_Putc(char ch, SSD1306_Font_t* Font, SSD1306_COLOR_t color) {
 	}
 	
 	/* Go through font */
-	for (i = 0; i < Font->FontHeight; i++) {
-		b = Font->data[(ch - 32) * Font->FontHeight + i];
-		for (j = 0; j < Font->FontWidth; j++) {
+	for (uint32_t i = 0; i < Font->FontHeight; ++i) {
+		uint32_t b = Font->data[(ch - 32) * Font->FontHeight + i];
+		for (uint32_t j = 0; j < Font->FontWidth; ++j) {
 			if ((b << j) & 0x8000) {
 				SSD1306_DrawPixel(SSD1306.CurrentX + j, (SSD1306.CurrentY + i), (SSD1306_COLOR_t) color);
 			} else {
@@ -235,7 +223,7 @@ char SSD1306_Puts(char* str, SSD1306_Font_t* Font, SSD1306_COLOR_t color) {
  
 
 void SSD1306_DrawLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, SSD1306_COLOR_t c) {
-	int16_t dx, dy, sx, sy, err, e2, i, tmp; 
+	int16_t dx, dy, sx, sy, err, e2, tmp;
 	
 	/* Check for overflow */
 	if (x0 >= SSD1306_WIDTH) {
@@ -271,7 +259,7 @@ void SSD1306_DrawLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, SSD130
 		}
 		
 		/* Vertical line */
-		for (i = y0; i <= y1; i++) {
+		for (int16_t i = y0; i <= y1; ++i) {
 			SSD1306_DrawPixel(x0, i, c);
 		}
 		
@@ -293,7 +281,7 @@ void SSD1306_DrawLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, SSD130
 		}
 		
 		/* Horizontal line */
-		for (i = x0; i <= x1; i++) {
+		for (int16_t i = x0; i <= x1; ++i) {
 			SSD1306_DrawPixel(i, y0, c);
 		}
 		
@@ -320,10 +308,7 @@ void SSD1306_DrawLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, SSD130
 
 void SSD1306_DrawRectangle(uint16_t x, uint16_t y, uint16_t w, uint16_t h, SSD1306_COLOR_t c) {
 	/* Check input parameters */
-	if (
-		x >= SSD1306_WIDTH ||
-		y >= SSD1306_HEIGHT
-	) {
+	if (x >= SSD1306_WIDTH || y >= SSD1306_HEIGHT) {
 		/* Return error */
 		return;
 	}
@@ -344,13 +329,8 @@ void SSD1306_DrawRectangle(uint16_t x, uint16_t y, uint16_t w, uint16_t h, SSD13
 }
 
 void SSD1306_DrawFilledRectangle(uint16_t x, uint16_t y, uint16_t w, uint16_t h, SSD1306_COLOR_t c) {
-	uint8_t i;
-	
 	/* Check input parameters */
-	if (
-		x >= SSD1306_WIDTH ||
-		y >= SSD1306_HEIGHT
-	) {
+	if (x >= SSD1306_WIDTH || y >= SSD1306_HEIGHT) {
 		/* Return error */
 		return;
 	}
@@ -364,7 +344,7 @@ void SSD1306_DrawFilledRectangle(uint16_t x, uint16_t y, uint16_t w, uint16_t h,
 	}
 	
 	/* Draw lines */
-	for (i = 0; i <= h; i++) {
+	for (uint8_t i = 0; i <= h; ++i) {
 		/* Draw lines */
 		SSD1306_DrawLine(x, y + i, x + w, y + i, c);
 	}
@@ -380,8 +360,7 @@ void SSD1306_DrawTriangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, ui
 
 void SSD1306_DrawFilledTriangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t x3, uint16_t y3, SSD1306_COLOR_t color) {
 	int16_t deltax = 0, deltay = 0, x = 0, y = 0, xinc1 = 0, xinc2 = 0, 
-	yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0, 
-	curpixel = 0;
+	yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0;
 	
 	deltax = ABS(x2 - x1);
 	deltay = ABS(y2 - y1);
@@ -420,7 +399,7 @@ void SSD1306_DrawFilledTriangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t 
 		numpixels = deltay;
 	}
 
-	for (curpixel = 0; curpixel <= numpixels; curpixel++) {
+	for (int16_t curpixel = 0; curpixel <= numpixels; ++curpixel) {
 		SSD1306_DrawLine(x, y, x3, y3, color);
 
 		num += numadd;
@@ -448,11 +427,11 @@ void SSD1306_DrawCircle(int16_t x0, int16_t y0, int16_t r, SSD1306_COLOR_t c) {
 
     while (x < y) {
         if (f >= 0) {
-            y--;
+            --y;
             ddF_y += 2;
             f += ddF_y;
         }
-        x++;
+        ++x;
         ddF_x += 2;
         f += ddF_x;
 
@@ -483,11 +462,11 @@ void SSD1306_DrawFilledCircle(int16_t x0, int16_t y0, int16_t r, SSD1306_COLOR_t
 
     while (x < y) {
         if (f >= 0) {
-            y--;
+            --y;
             ddF_y += 2;
             f += ddF_y;
         }
-        x++;
+        ++x;
         ddF_x += 2;
         f += ddF_x;
 
@@ -504,6 +483,7 @@ void SSD1306_ON(void) {
 	SSD1306_WRITECOMMAND(0x14);
 	SSD1306_WRITECOMMAND(0xAF);
 }
+
 void SSD1306_OFF(void) {
 	SSD1306_WRITECOMMAND(0x8D);
 	SSD1306_WRITECOMMAND(0x10);
