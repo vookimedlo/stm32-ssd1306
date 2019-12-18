@@ -120,10 +120,7 @@ static void I2C_Write(uint8_t address, uint8_t reg, uint8_t data, uint32_t timeo
 }
 
 static void I2C_WriteMulti(uint8_t address, uint8_t reg, const uint8_t* data, uint16_t size, uint32_t timeout) {
-    uint8_t dataToSend[SSD1306_WIDTH + 1];
-    dataToSend[0] = reg;
-    memcpy(dataToSend + 1, data, size);
-    HAL_I2C_Master_Transmit(i2cHandle, address, dataToSend, size + 1, timeout);
+    HAL_I2C_Mem_Write(i2cHandle, address, reg, I2C_MEMADD_SIZE_8BIT, data, size, timeout);
 }
 
 void SSD1306_UpdateScreen(void) {
