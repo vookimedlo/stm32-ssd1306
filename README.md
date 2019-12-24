@@ -10,7 +10,7 @@ Original code was taken from Tilen Majerle.
 
 Changes in the *stm32-ssd1306:*
 - updated to be based on the original STM32 HAL Drivers.
-- initial SSD1306 was fixed and updated to the 128x32 OLED display.
+- initial SSD1306 sequence was fixed and updated to the 128x32 OLED display.
 - code cleaned-up and aligned to the C11.
 - expected SSD1306 I²C address is ```0x3C```, could be changed by re-defining ```SSD1306_I2C_ADDR``` macro.
 
